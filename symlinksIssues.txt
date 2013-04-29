@@ -1,0 +1,4 @@
+filering.R is a symlink to the filtering package.
+
+I use symlinks and I place all the R files in the ~/PWLisp folder
+and all the shared objects in the ~/RLibs folder.
