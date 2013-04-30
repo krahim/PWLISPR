@@ -1,20 +1,22 @@
-## set local paths
+## set local path
 
 pathToFiles <- "~/PWLisp/"
-pathToLibs <- "~/RLibs/"
+
+
 ## set to false if no Fortran libs compiled
 useFortranLib <- TRUE
+## set location of filteringFLIB.R. I use symlinks and keep filteringFLIB.R
+## all in same folder.
 
-library("multitaper")
+pathToFortranSetupFiles <- pathToFiles
+
 source(paste(pathToFiles, "utilities.R", sep=""))
 source(paste(pathToFiles, "tapers.R", sep=""))
 
 ## load dynamic library
-## set to false if no lib compiled
+
 if(useFortranLib) {
-    filteringLib <- paste(pathToLibs, "filtering", .Platform$dynlib.ext, sep="")
-    dyn.load(filteringLib)
-    source(paste(pathToFiles, "filteringFLIB.R", sep=""))
+    source(paste(pathToFortranSetupFiles, "filteringFLIB.R", sep=""))
 }
 
 
