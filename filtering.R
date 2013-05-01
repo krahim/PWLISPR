@@ -1,21 +1,20 @@
 ## set local path
-
 pathToFiles <- "~/PWLisp/"
-
 
 ## set to false if no Fortran libs compiled
 useFortranLib <- TRUE
 ## set location of filteringFLIB.R. I use symlinks and keep filteringFLIB.R
 ## all in same folder.
-
 pathToFortranSetupFiles <- pathToFiles
+
+library("multitaper") ## required for dpss filter,
+## one can use the zeroth order dpss instead.
 
 source(paste(pathToFiles, "utilities.R", sep=""))
 source(paste(pathToFiles, "tapers.R", sep=""))
 
-## load dynamic library
-
 if(useFortranLib) {
+    ## load dynamic library and fortran versions of the function.
     source(paste(pathToFortranSetupFiles, "filteringFLIB.R", sep=""))
 }
 
@@ -55,6 +54,14 @@ filterTimeSeriesDirect <- function(timeSeries, theFilter) {
     res
 }
 
+## > filterTimeSeriesDirect(c(1,2,3,4,5,-5,-7,-9, 10, 11, 13), c(1,-1))
+## $result
+##  [1]   1   1   1   1 -10  -2  -2  19   1   2
+
+## $nOutput
+## [1] 10
+
+
 filterTimeSeriesDirectR <- function(timeSeries, theFilter) {
     nFilter <- length(theFilter)
     nFilterM1 <- nFilter -1
@@ -71,9 +78,6 @@ filterTimeSeriesDirectR <- function(timeSeries, theFilter) {
     }
     return(list(result=result, nOutput=nOutput))
 }
-
-
-
 
 ##filterdirect
 ##filter( c(1,2,3,4,5,-5,-7,-9, 10, 11, 13), c(1,-1))
@@ -267,6 +271,9 @@ idealHighPassFilterIRS <- function(k, W) {
 ## ;;;       a high-pass filter;
 ## ;;;       by setting W-low = 0.5, this routine produces the irs for
 ## ;;;       a low-pass filter
+
+
+
 idealBandPassFilterIRS <- function(k, W.low, W.high) {
 ##     "given
 ##    [1] k (required)
@@ -526,23 +533,69 @@ createDPSS_LowPassFilter <- function(filterLength,
 ## (sum (create-dpss-low-pass-filter 5 0.04 0.1))
 ## ;==> 0.9999999999999999
 ## |#
-## dpss <- function (n, k, nw, returnEigenvalues = TRUE) 
-## {
-##     stopifnot(n >= 1, nw/n >0, nw/n < 0.5, k >= 1)
-    
-##     if (!is.integer(k)) {
-##         k <- as.integer(floor(k))
-##     }
-##     out <- .Fortran("dpss", as.integer(n), as.integer(k), as.double(nw), 
-##         v = double(n * k), eigen = double(k), PACKAGE = "multitaper")
-##     out$v <- matrix(data = out$v, nrow = n, ncol = k, byrow = FALSE)
-##     if (returnEigenvalues) {
-##         out$eigen <- dpssToEigenvalues(out$v, nw)
-##     }
-##     else {
-##         out$eigen <- out$eigen
-##     }
-##     res <- list(v = out$v, eigen = out$eigen)
-##     class(res) <- "dpss"
-##     return(res)
-## }
+
+composeTwoSymmetricFilters <- function(filter1, filter2)  {
+    ## "given any number of symmetric filters
+    ## (each of odd length and each represented
+    ## by a vector of coefficients),
+    ## returns the composite filter
+    ## that will produce an output
+    ## identical to that obtained
+    ## by cascading the individual filters" 
+    halfLengthFilter1 <- (length(filter1) -1) /2
+    halfLengthFilter2 <- (length(filter2) -1) /2
+    stopifnot(halfLengthFilter1 %% 1 == 0,
+              halfLengthFilter2 %% 1 == 0)
+    K <- min(halfLengthFilter1, halfLengthFilter2)
+    L <- max(halfLengthFilter2, halfLengthFilter2)
+    KplusL <- K + L
+    TwoxKplusL <- 2 * KplusL
+    shortLength <- 1 + 2*K
+    ##indexOfLastShort <- shortLength -1 ## this is for zero based
+    compositeFilter <- rep(0, 1 + TwoxKplusL)
+
+    shortFilter <- NULL
+    longFilter <- NULL
+    if(halfLengthFilter1 <= halfLengthFilter2) {
+        shortFilter <- filter1
+        longFilter <- filter2
+    } else {
+        shortFilter <- filter2
+        longFilter <- filter1
+    }
+    ## caution indexing swich
+    for( j in 1:(1+ KplusL) )
+    {
+        for( m in 1:min(j, shortLength)) {
+            compositeFilter[j] <-  compositeFilter[j] +
+                shortFilter[shortLength - m +1] *
+                    longFilter[j - m +1]
+        }
+        compositeFilter[TwoxKplusL -j +2] <-
+            compositeFilter[j]
+            
+    }
+    compositeFilter
+}
+
+## > composeTwoSymmetricFilters(c(1/4, 1/2, 1/4), c(1/4, 1/2, 1/4))
+## [1] 0.0625 0.2500 0.3750 0.2500 0.0625
+## > composeTwoSymmetricFilters(c(1/8, 1/4, 1/4, 1/4, 1/8), c(1/4, 1/2, 1/4))
+## [1] 0.03125 0.12500 0.21875 0.12500 0.03125
+## > composeTwoSymmetricFilters(c(1/4, 1/2, 1/4),
+## +                            composeTwoSymmetricFilters(c(1/4, 1/2, 1/4), c(1/4, 1/2, 1/4)))
+## [1] 0.015625 0.093750 0.234375 0.312500 0.234375 0.093750 0.015625
+## > composeTwoSymmetricFilters(c(0.0625, 0.25, 0.375, 0.25, 0.0625), c(1/4, 1/2, 1/4))
+## [1] 0.015625 0.093750 0.234375 0.093750 0.015625
+## > composeTwoSymmetricFilters(c(1/4, 1/2, 1/4), c(0.0625, 0.25, 0.375, 0.25, 0.0625))
+## [1] 0.015625 0.093750 0.234375 0.312500 0.234375 0.093750 0.015625
+
+
+##   [44]> (setf a (make-array 5))
+## #(NIL NIL NIL NIL NIL)
+## [45]> (dotimes (i 5 a) (setf (aref a i) (+ i 0)))
+## #(0 1 2 3 4)
+
+## lisp loops start at zero and go to 1-value
+## the indexe is 0 
+
