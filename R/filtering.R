@@ -1,22 +1,26 @@
 ## set local path
-pathToFiles <- "~/PWLisp/"
+##pathToFiles <- "~/PWLisp/"
 
-## set to false if no Fortran libs compiled
-useFortranLib <- TRUE
+## set to TRUE and manually source the R file, which will link the dynamic library
+## that you build with a make file.
+
+useFortranLib <-FALSE
+
 ## set location of filteringFLIB.R. I use symlinks and keep filteringFLIB.R
 ## all in same folder.
-pathToFortranSetupFiles <- pathToFiles
+##pathToFortranSetupFiles <- pathToFiles
 
-library("multitaper") ## required for dpss filter,
+##library("multitaper") ## required for dpss filter,
 ## one can use the zeroth order dpss instead.
 
-source(paste(pathToFiles, "utilities.R", sep=""))
-source(paste(pathToFiles, "tapers.R", sep=""))
+##source(paste(pathToFiles, "utilities.R", sep=""))
+##source(paste(pathToFiles, "tapers.R", sep=""))
 
-if(useFortranLib) {
-    ## load dynamic library and fortran versions of the function.
-    source(paste(pathToFortranSetupFiles, "filteringFLIB.R", sep=""))
-}
+
+##if(useFortranLib) {
+##    ## load dynamic library and fortran versions of the function.
+##    source(paste(pathToFortranSetupFiles, "filteringFLIB.R", sep=""))
+##}
 
 
 

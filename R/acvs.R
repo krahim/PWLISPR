@@ -12,13 +12,13 @@
 ################################################################################
 
 #libraries required
-library(waveslim);
+##library(waveslim);
 
 ################################################################################
 # Requires:
-source("~/PWLisp/basicStatistics.R");
-source("~/PWLisp/utilities.R");
-source("~/PWLisp/tapers.R");
+##source("~/PWLisp/basicStatistics.R");
+##source("~/PWLisp/utilities.R");
+##source("~/PWLisp/tapers.R");
 #source("nonparametric.R");  caused probs circular
 
 ################################################################################

@@ -15,8 +15,8 @@
 ################################################################################
 
 # Requires:
-source("utilities.R");
-source("nonparametric.R");
+##source("utilities.R");
+##source("nonparametric.R");
 
 ################################################################################
 
@@ -55,8 +55,6 @@ FishergStat <- function(timeSeries,
                   gF=gF,
                   result=result));
 }
-
-        (sampling-time 1.0))
 
 
 #   "given

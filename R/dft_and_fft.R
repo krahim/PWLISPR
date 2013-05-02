@@ -1,18 +1,18 @@
-# The following functions are contained in dft-and-fft.R
-# These functions are loosley based on the lisp code provided with SAPA
-# http://lib.stat.cmu.edu/sapaclisp/
-# http://lib.stat.cmu.edu/sapaclisp/dft-and-fft.lisp
+## # The following functions are contained in dft-and-fft.R
+## # These functions are loosley based on the lisp code provided with SAPA
+## # http://lib.stat.cmu.edu/sapaclisp/
+## # http://lib.stat.cmu.edu/sapaclisp/dft-and-fft.lisp
 
-#note that the rest of the code uses the fft function provided by R
+## #note that the rest of the code uses the fft function provided by R
 
-#;;; The functions dft and inverse-dft implement the discrete Fourier
-#;;; transform and its inverse using, respectively, Equations (110a)
-#;;; and (111a) of the SAPA book.  They work on vectors of real
-#;;; or complex-valued numbers.  The vectors can be of any length.
-#;;; When the length of the input vector is a power of 2, these functions
-#;;; use fft_, a fast Fourier transform algorithm based upon one in Marple's
-#;;; 1987 book; when the length is not a power of 2, they use a chirp
-#;;; transform algorithm (as described in Section 3.10 of the SAPA book).
+## #;;; The functions dft and inverse-dft implement the discrete Fourier
+## #;;; transform and its inverse using, respectively, Equations (110a)
+## #;;; and (111a) of the SAPA book.  They work on vectors of real
+## #;;; or complex-valued numbers.  The vectors can be of any length.
+## #;;; When the length of the input vector is a power of 2, these functions
+## #;;; use fft_, a fast Fourier transform algorithm based upon one in Marple's
+## #;;; 1987 book; when the length is not a power of 2, they use a chirp
+## #;;; transform algorithm (as described in Section 3.10 of the SAPA book).
 
 # dft <- function(X, samplingTime =1.0)
 # inverseDFT <- function(X, samplingTime =1.0)
@@ -23,28 +23,30 @@
 
 ################################################################################
 
-# Requires:
-source("utilities.R");
+## # Requires:
+## ##source("utilities.R");
 
-################################################################################
+## ################################################################################
 
-#note that the rest of the code uses the fft function provided by R
-#lisp versions,  
+## #note that the rest of the code uses the fft function provided by R
+## #lisp versions,  
 
 
 
-#given:
-#[1] x (required)
-# <=> a vector of real or complex-valued numbers
-#[2] sampling-time (keyword; 1.0)
-#returns:
-#[1] the discrete Fourier transform of x, namely,
-#                      N-1
-#X(n) =  sampling-time SUM x(t) exp(-i 2 pi n t/N)
-#                      t=0
-#---
-#Note: see Equation (110a) of the SAPA book
+
 dft <- function(X, samplingTime =1.0) {
+    ##given:
+    ##[1] x (required)
+    ## <=> a vector of real or complex-valued numbers
+    ##[2] sampling-time (keyword; 1.0)
+    ##returns:
+    ##[1] the discrete Fourier transform of x, namely,
+    ##                      N-1
+                                        #X(n) =  sampling-time SUM x(t) exp(-i 2 pi n t/N)
+    ##                      t=0
+    ##---
+    ##Note: see Equation (110a) of the SAPA book
+    
    if(is.numeric(powerOf2(length(X)))) {
       X <- fft_(X);
    } else {
@@ -56,28 +58,28 @@ dft <- function(X, samplingTime =1.0) {
    return(X);
 }
 
-#given:
-#[1] X (required)
-# <=> a vector of real or complex-valued numbers
-#[2] sampling-time (keyword; 1.0)
-#returns:
-#[1] X, with contents replaced by
-# the inverse discrete Fourier transform of X, namely,
-#                                N-1
-# x(t) =  (N sampling-time)^{-1} SUM X(n) exp(i 2 pi n t/N)
-#                                n=0
-#---
-#Note: see Equation (111a) of the SAPA book
 inverseDFT <- function(X, samplingTime =1.0) {
-   N <- length(X);
-   oneOverNXSamplingTime <- 1/(N*samplingTime);
-   X <- Conj(X);
-   if(is.numeric(powerOf2(N))) {
-      X <- fft_(X);
-   } else {
-      X <- dftChirp_(X);
-   }
-   return(oneOverNXSamplingTime*Conj(X));
+    ## #given:
+    ## #[1] X (required)
+    ## # <=> a vector of real or complex-valued numbers
+    ## #[2] sampling-time (keyword; 1.0)
+    ## #returns:
+    ## #[1] X, with contents replaced by
+    ## # the inverse discrete Fourier transform of X, namely,
+    ## #                                N-1
+    ## # x(t) =  (N sampling-time)^{-1} SUM X(n) exp(i 2 pi n t/N)
+    ## #                                n=0
+    ## #---
+    ## #Note: see Equation (111a) of the SAPA book
+    N <- length(X);
+    oneOverNXSamplingTime <- 1/(N*samplingTime);
+    X <- Conj(X);
+    if(is.numeric(powerOf2(N))) {
+        X <- fft_(X);
+    } else {
+        X <- dftChirp_(X);
+    }
+    return(oneOverNXSamplingTime*Conj(X));
 }
 
 #inverseDFTEx(dftEx(c(1.0, 6.2, pi, -7.0, - pi)))

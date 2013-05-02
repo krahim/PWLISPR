@@ -57,10 +57,10 @@
 ################################################################################
 
 # Requires:
-source("~/PWLisp/basicStatistics.R");
-source("~/PWLisp/tapers.R");
-source("~/PWLisp/utilities.R");
-source("~/PWLisp/acvs.R");
+##source("~/PWLisp/basicStatistics.R");
+##source("~/PWLisp/tapers.R");
+##source("~/PWLisp/utilities.R");
+##source("~/PWLisp/acvs.R");
 
 ################################################################################
 
@@ -276,7 +276,7 @@ BartlettMtoBandwidth <- function(m, samplingTime=1.0) {
 #Note: see Table 269 of the SAPA book
 BartlettBandwidthtoM <- function(B_W, samplingTime=1.0) {
    m <- max(1, round(1.5/(B_W*samplingTime)));
-   return(list(m=m, B_W=bartlettMtoBandwidth(m)));
+   return(list(m=m, B_W=BartlettMtoBandwidth(m)));
 }
 
 BartlettNandMtoDF <- function(N, m, C_h=1.0) {

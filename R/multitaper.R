@@ -45,15 +45,15 @@
 ################################################################################
 
 #libraries required
-library(waveslim);
+##library(waveslim);
 
 ################################################################################
 # Requires:
-source("basicStatistics.R");
-source("utilities.R");
-source("tapers.R");
-source("nonparametric.R");
-source("acvs.R");
+##source("basicStatistics.R");
+##source("utilities.R");
+##source("tapers.R");
+##source("nonparametric.R");
+##source("acvs.R");
 
 ################################################################################
 
@@ -775,7 +775,7 @@ fastTridiagEigenvalueToDPSS <- function(
    } else {
       if(orderOfTaper%%2 == 0) {
          shorterDiag[M] <- shorterDiag[M] +
-            2.0 * offDiag[M]^2 / eigenvalue;
+            2.0 * offDiagEl[M]^2 / eigenvalue;
       }
    }
    shorterDiag <- shorterDiag - eigenvalue;
