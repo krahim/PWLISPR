@@ -5,7 +5,7 @@ Title: PWLISPR
 Author: Karim Rahim <karim.rahim@gmail.com>
 Maintainer: Karim Rahim <karim.rahim@gmail.com>
 Depends: R (>= 2.15.2), multitaper, waveslim, bitops
-Description: Percival and Walden LISP code ported to R. There is no documentation but the R files are commented fairly well. This package can make use of filtering R and source code which is currently built with a Makefile. See: http://github.com/krahim/filtering
+Description: Percival and Walden LISP code ported to R. There is no documentation but the R files are commented fairly well. This package also includes code for the sine multitaper spectral estimate. This package can make use of filtering R and source code which is currently built with a Makefile. See: http://github.com/krahim/filtering
 License: GPL (>= 2)
 ByteCompile: true
 URL: http://github.com/krahim/PWLISPR
