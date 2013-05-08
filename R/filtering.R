@@ -4,7 +4,7 @@
 ## set to TRUE and manually source the R file, which will link the dynamic library
 ## that you build with a make file.
 
-useFortranLib <-FALSE
+##useFortranLib <-FALSE
 
 ## set location of filteringFLIB.R. I use symlinks and keep filteringFLIB.R
 ## all in same folder.
@@ -48,14 +48,11 @@ useFortranLib <-FALSE
 ## ---
 ## Note: result can be the same as time-series"
 
+## There are two versions, one in R and one in Fortran.
+## The filtering package will overwrite this function and
+## give an option. 
 filterTimeSeriesDirect <- function(timeSeries, theFilter) {
-    res <- NULL
-    if(useFortranLib) {
-        res <- filterTimeSeriesDirectF(timeSeries, theFilter)
-    } else {
-        res <- filterTimeSeriesDirectR(timeSeries, theFilter)
-    }
-    res
+    filterTimeSeriesDirectR(timeSeries, theFilter)
 }
 
 ## > filterTimeSeriesDirect(c(1,2,3,4,5,-5,-7,-9, 10, 11, 13), c(1,-1))
@@ -64,7 +61,6 @@ filterTimeSeriesDirect <- function(timeSeries, theFilter) {
 
 ## $nOutput
 ## [1] 10
-
 
 filterTimeSeriesDirectR <- function(timeSeries, theFilter) {
     nFilter <- length(theFilter)
@@ -101,14 +97,11 @@ filterWfft_old<- function(timeSeries, filter) {
 }    
 
 
+## There are two versions, one in R and one in Fortran.
+## The filtering package will overwrite this function and
+## give an option. 
 filterWfft <- function(timeSeries, filter1) {
-    res <- NULL
-    if(useFortranLib) {
-        res <- filterWfftF(timeSeries, filter1)
-    } else {
-        res <- filterWfftR(timeSeries, filter1)
-    }
-    res
+    filterWfftR(timeSeries, filter1)
 }
 
 filterWfftR <- function(timeSeries, filter1) {

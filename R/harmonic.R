@@ -47,36 +47,36 @@ FishergStat <- function(timeSeries,
     ##        of white noise
     ## ---
     ## Note: see Section 10.9 of the SAPA book"
-   result <- NULL;
-   N <- length(timeSeries);
-   M = length(timeSeries);
-   m = 0;
-   if(N%%2==0) {
-      m <- (N-2)/2;
-   } else {
-      m <- (N-1)/2;
-   }
-
-   if(m<= 1) {
-      return(list(gStat=1.0, critical=1.0, hyp="Fail To Reject"));
-   }
-   gF <- 1.0 - ( (alpha/m)^(1/(m-1)));
-   thePeriodogram <- periodogram(timeSeries,
-                                 centreData,
-                                 nNonZeroFreqs="Fourier",
-                                 returnEstFor0FreqP=F,
-                                 sdfTransformation=F);
-   maxShp <- max(thePeriodogram$sdf[1:m]);
-   sumShp <- sum(thePeriodogram$sdf[1:m]);
-   gStatistic <- maxShp/as.double(sumShp);
-   if(gStatistic > gF) {
-      result <- "Reject";
-   } else {
-      result <- "Fail to Reject";
-   }
-   return(list(gStatistic=gStatistic,
-                  gF=gF,
-                  result=result));
+    result <- NULL;
+    N <- length(timeSeries);
+    M <- length(timeSeries);
+    m <- 0;
+    if(N%%2==0) {
+        m <- (N-2)/2;
+    } else {
+        m <- (N-1)/2;
+    }
+    
+    if(m<= 1) {
+        return(list(gStat=1.0, critical=1.0, hyp="Fail To Reject"));
+    }
+    gF <- 1.0 - ( (alpha/m)^(1/(m-1)));
+    thePeriodogram <- periodogram(timeSeries,
+                                  centreData,
+                                  nNonZeroFreqs="Fourier",
+                                  returnEstFor0FreqP=F,
+                                  sdfTransformation=F);
+    maxShp <- max(thePeriodogram$sdf[1:m]);
+    sumShp <- sum(thePeriodogram$sdf[1:m]);
+    gStatistic <- maxShp/as.double(sumShp);
+    if(gStatistic > gF) {
+        result <- "Reject";
+    } else {
+        result <- "Fail to Reject";
+    }
+    return(list(gStatistic=gStatistic,
+                gF=gF,
+                result=result));
 }
 
 

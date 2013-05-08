@@ -308,8 +308,9 @@ sineMTM <- function(  timeSeries,
     
     return( list(  resultSDF=res$resultSDF,
                  resultFreqs=res$resultFreqs,
-                 mTaperedSpectra=res$mTaperedSpectra,
-                 eigenValues=tapers$eigen));
+                 mTaperedSpectra=res$mTaperedSpectra))##,
+                 ## seems like the following was an error May 13, 2013
+                 ##eigenValues=tapers$eigen));
     
 }
 
@@ -386,7 +387,7 @@ coherence <- function(  Smt1,
    #TODO: checks required
 
    num <- apply(Smt1*Conj(Smt2), 1, mean);
-   return(num / (Samt1*Samt2));
+   return(num / (Smt1*Smt2));
 }
 
 mtmCohere2 <- function( timeSeriesA,

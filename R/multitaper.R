@@ -81,29 +81,34 @@ checkOrthonormality <- function(X) {
 #modified dpss function
 #uses inverse iteration
 #http://lib.stat.cmu.edu/jcgs/bell-p-w
-dpss.taper.2 <- function (n, k, nw = 4, nmax = 2^(ceiling(log(n, 2))))
-{
-    if (n > nmax)
-        stop("length of taper is greater than nmax")
-    w <- nw/n
-    if (w > 0.5)
-        stop("half-bandwidth parameter (w) is greater than 1/2")
-    if (k <= 0)
-        stop("positive dpss order (k) required")
-    v <- matrix(0, nrow = nmax, ncol = (k + 1))
+## dpss.taper.2 <- function (n, k, nw = 4, nmax = 2^(ceiling(log(n, 2))))
+## {
+##     if (n > nmax)
+##         stop("length of taper is greater than nmax")
+##     w <- nw/n
+##     if (w > 0.5)
+##         stop("half-bandwidth parameter (w) is greater than 1/2")
+##     if (k <= 0)
+##         stop("positive dpss order (k) required")
+##     v <- matrix(0, nrow = nmax, ncol = (k + 1))
 
-    storage.mode(v) <- "double"
-    out <- .Fortran("dpss", nmax = as.integer(nmax), kmax = as.integer(k),
-        n = as.integer(n), w = as.double(w), v = v, sig = double(k +
-            1), totit = integer(1), sines = double(n), vold = double(n),
-        u = double(n), scr1 = double(n), ifault = integer(1),
-        PACKAGE = "waveslim")
-    return(list(  v=out$v[1:n, 1:k],
-                  eigen=1+out$sig[1:k],
-                  iter=out$totit,
-                  n=n,
-                  w=w,
-                  ifault=out$ifault) );
+##     storage.mode(v) <- "double"
+##     out <- .Fortran("dpss", nmax = as.integer(nmax), kmax = as.integer(k),
+##         n = as.integer(n), w = as.double(w), v = v, sig = double(k +
+##             1), totit = integer(1), sines = double(n), vold = double(n),
+##         u = double(n), scr1 = double(n), ifault = integer(1),
+##         PACKAGE = "waveslim")
+##     return(list(  v=out$v[1:n, 1:k],
+##                   eigen=1+out$sig[1:k],
+##                   iter=out$totit,
+##                   n=n,
+##                   w=w,
+##                   ifault=out$ifault) );
+## }
+
+##the above is no longer required.
+dpss.taper.2 <- function (n, k, nw = 4, nmax = 2^(ceiling(log(n, 2)))) {
+    waveslim::dpss.taper(n, k, nw=nw, nmax=nmax)
 }
 
 #format(dpssToEigenvalue(
