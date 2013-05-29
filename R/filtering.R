@@ -81,8 +81,30 @@ filterTimeSeriesDirectR <- function(timeSeries, theFilter) {
 
 ##filterdirect
 ##filter( c(1,2,3,4,5,-5,-7,-9, 10, 11, 13), c(1,-1))
-##filterfft
-##convolve( c(1,2,3,4,5,-5,-7,-9), c(1,-1), type="filter")
+##filterTimeSeriesDirect( c(1,2,3,4,5,-5,-7,-9, 10, 11, 13), c(1,-1))
+
+##convolve( c(1,2,3,4,5,-5,-7,-9, 10, 11, 13), c(1,-1), type="filter")
+##convolve( c(1,2,3,4,5,-5,-7,-9, 10, 11, 13), c(1,-1), conj=FALSE, type="filter")
+
+## > convolve( c(1,2,3,4,5,-5,-7,-9, 10, 11, 13), c(1/3,1/3), type="filter")
+##  [1]  1.000000e+00  1.666667e+00  2.333333e+00  3.000000e+00  2.960595e-16
+##  [6] -4.000000e+00 -5.333333e+00  3.333333e-01  7.000000e+00  8.000000e+00
+## > convolve( c(1,2,3,4,5,-5,-7,-9, 10, 11, 13), c(1/3,1/3), conj=T, type="filter")
+##  [1]  1.000000e+00  1.666667e+00  2.333333e+00  3.000000e+00  2.960595e-16
+##  [6] -4.000000e+00 -5.333333e+00  3.333333e-01  7.000000e+00  8.000000e+00
+## > filterWfft( c(1,2,3,4,5,-5,-7,-9, 10, 11, 13), c(1/3,1/3))$result
+##  [1]  1.000000e+00  1.666667e+00  2.333333e+00  3.000000e+00 -1.110223e-16
+##  [6] -4.000000e+00 -5.333333e+00  3.333333e-01  7.000000e+00  8.000000e+00
+
+## $nOutput
+## [1] 10
+
+## > convolve( c(1,2,3,4,5,-5,-7,-9, 10, 11, 13), c(1/3,1/3), conj=T, type="filter")
+##  [1]  1.000000e+00  1.666667e+00  2.333333e+00  3.000000e+00  2.960595e-16
+##  [6] -4.000000e+00 -5.333333e+00  3.333333e-01  7.000000e+00  8.000000e+00
+## > convolve( c(1,2,3,4,5,-5,-7,-9, 10, 11, 13), c(1/3,1/3), type="filter")
+## notes on convolve, it seems fine when filters are all positive, there may be some issues with negative values.
+
 
 ##perhaps try something like...
 ##Re(fft(Conj(fft(tspad)*fft(fpad)))/256)[3:(length(ts))]
