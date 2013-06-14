@@ -21,8 +21,9 @@
 ## ################################################################################
 
 FishergStat <- function(timeSeries,
-                     centreData=TRUE,
-                     alpha=.05) {
+                        centreData=TRUE,
+                        alpha=.05,
+                        periodogramIn=NULL) {
     
     ##         "given
     ##    [1] time-series (required)
@@ -47,9 +48,13 @@ FishergStat <- function(timeSeries,
     ##        of white noise
     ## ---
     ## Note: see Section 10.9 of the SAPA book"
+    ## mod
+    ## added periodgramIn, imput the results of the periodogram function to save calculation.
+    ## note the periodogram can be added as an imput to save FFT in simulations, June 12
+ 
     result <- NULL 
     N <- length(timeSeries) 
-    M <- length(timeSeries) 
+    ##M <- length(timeSeries) 
     m <- 0 
     if(N%%2==0) {
         m <- (N-2)/2 
@@ -60,12 +65,19 @@ FishergStat <- function(timeSeries,
     if(m<= 1) {
         return(list(gStat=1.0, critical=1.0, hyp="Fail To Reject")) 
     }
-    gF <- 1.0 - ( (alpha/m)^(1/(m-1))) 
-    thePeriodogram <- periodogram(timeSeries,
-                                  centreData,
-                                  nNonZeroFreqs="Fourier",
-                                  returnEstFor0FreqP=FALSE,
-                                  sdfTransformation=FALSE) 
+    gF <- 1.0 - ( (alpha/m)^(1/(m-1)))
+
+    thePeriodogram <- NULL
+    if(is.null(periodogramIn)) {
+        thePeriodogram <- periodogram(timeSeries,
+                                      centreData,
+                                      nNonZeroFreqs="Fourier",
+                                      returnEstFor0FreqP=FALSE,
+                                      sdfTransformation=FALSE)
+    } else {
+        thePeriodogram <- periodogramIn
+    }
+      
     maxShp <- max(thePeriodogram$sdf[1:m]) 
     sumShp <- sum(thePeriodogram$sdf[1:m]) 
     gStatistic <- maxShp/as.double(sumShp) 
