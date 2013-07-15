@@ -202,7 +202,7 @@ dpssTapersTriDiag <- function(   N,
 
 multitaperSpectralEstimate <- function( timeSeries,
                      mDataTapers,
-                     centreData=T,
+                     centreData=TRUE,
                      nTapers=length(mDataTapers[1,]),
                      nNonZeroFreqs="halfNextPowerOf2",
                      samplingTime=1.0,
@@ -210,7 +210,7 @@ multitaperSpectralEstimate <- function( timeSeries,
                      restorePowerOptionP=T,
                      returnEstFor0FreqP=F,
                      sdfTransformation=convertTodB,
-                     returnEigenCoef=F) {
+                     returnEigenCoef=FALSE) {
    if(   !is.matrix(mDataTapers) ||
          length(timeSeries) != length(mDataTapers[,1])) {
       return();
@@ -339,12 +339,12 @@ eigenspectraToMultitaperSpectralEstimate <- function (
 eigenSpectraToAdaptiveMultitaperSpectralEstimate <- function(
          mEigenSpectra,
          eigenValues,
-         varianceOfTimeSeries,   #use sampleVariance.bias()
+         varianceOfTimeSeries,   ###use sampleVariance.bias()
          samplingTime=1.0,
          nEigenSpectra=length(mEigenSpectra[1,]),
          maximumNumberOfIterations=100,
          sdfTransformation=convertTodB,
-         returnWeights=F) {
+         returnWeights=FALSE) {
    if( !is.matrix(mEigenSpectra) ||
          length(mEigenSpectra[1,]) <= 1) {
       return();
@@ -544,7 +544,7 @@ largestEigenvaluesOfTridiagonalMatrix <- function(diagEl,
                   numberOfTapers,
                   squaredOffDiagEl=(offDiagEl)^2,
                   macheps=.Machine$double.eps,
-                  printProgressP=F) {
+                  printProgressP=FALSE) {
    n <- length(diagEl);
    nm1 <- n -1;
    #;;; Set to zero all elements of squared-off-diag that correspond to
@@ -763,7 +763,7 @@ fastTridiagEigenvalueToDPSS <- function(
    maximumNumberOfIterations=25,
    b=generateInitialGuessAtDPSS(length(diagEl),
       orderOfTaper,
-      halfSizeP=T)) {
+      halfSizeP=TRUE)) {
    N <- length(diagEl);
    M <- if(N%%2 ==0) N/2 else (N-1)/2;
 
