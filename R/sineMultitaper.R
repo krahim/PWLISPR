@@ -37,10 +37,10 @@ sineMultitaperSpectralEstimate <- function(timeSeries,
                      centreData=T,
                      nTapers=length(mDataTapers[1,]),
                      nNonZeroFreqs="halfNextPowerOf2",
-                     returnEstFor0FreqP=F,
+                     returnEstFor0FreqP=FALSE,
                      samplingTime=1.0,
-                     recentreAfterTaperingP=T,
-                     restorePowerOptionP=T,
+                     recentreAfterTaperingP=TRUE,
+                     restorePowerOptionP=TRUE,
                      sdfTransformation=convertTodB)  {
    sampleSize <- length(timeSeries);
    nFreqs <- getNFreqs(nNonZeroFreqs, sampleSize, returnEstFor0FreqP);

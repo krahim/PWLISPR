@@ -92,12 +92,12 @@ getNFreqs <- function(nNonZeroFreq, sampleSize, returnEstFor0FreqP) {
 
 #similar to the lisp SAPA code
 periodogram <- function(timeSeries,
-                   centreData=T,
+                   centreData=TRUE,
                    nNonZeroFreqs="halfNextPowerOf2",
-                   returnEstFor0FreqP=F,
+                   returnEstFor0FreqP=FALSE,
                    samplingTime=1.0,
                    sdfTransformation=convertTodB,
-                   returnFourierCoef=F) {#,
+                   returnFourierCoef=FALSE) {#,
                    #freqTransformation=NULL) {
    sampleSize <- length(timeSeries);
    nFreqs <- getNFreqs(nNonZeroFreqs, sampleSize, returnEstFor0FreqP);
@@ -165,14 +165,14 @@ periodogram <- function(timeSeries,
 
 
 directSpectralEst <- function(   timeSeries,
-                                 centreData=T,
+                                 centreData=TRUE,
                                  nNonZeroFreqs="halfNextPowerOf2",
-                                 returnEstFor0FreqP=F,
+                                 returnEstFor0FreqP=FALSE,
                                  samplingTime=1.0,
                                  dataTaper=NULL,
                                  dataTaperParameter=NULL,
-                                 recentreAfterTaperingP=T,
-                                 restorePowerOptionP=T,
+                                 recentreAfterTaperingP=TRUE,
+                                 restorePowerOptionP=TRUE,
                                  sdfTransformation=convertTodB) {
    if(!is.function(dataTaper)) {
       cat("DataTaper must be a function\n");
@@ -193,7 +193,7 @@ directSpectralEst <- function(   timeSeries,
                      recentreAfterTaperingP=recentreAfterTaperingP,
                      restorePowerOptionP=restorePowerOptionP);
    sdf <- scratch$result;
-   resACVS <- acvs(sdf, centreDataP=F);
+   resACVS <- acvs(sdf, centreDataP=FALSE);
    sdf <- c(sdf, rep(0.0, nDFT-sampleSize));
    sdf <- fft(sdf);
    sdf <- abs(sdf[(1+offSet):(nFreqs+offSet)])^2*fiddleFactorSDF;
@@ -412,7 +412,7 @@ lagWindowSpectralEst <- function( acvs_,
                                  maxLag=length(acvs_) -1,
                                  N_ts=length(acvs_),
                                  nNonZeroFreqs="halfNextPowerOf2",
-                                 returnEstFor0FreqP=F,
+                                 returnEstFor0FreqP=FALSE,
                                  samplingTime=1.0,
                                  C_h=1.0,
                                  sdfTransformation=convertTodB) {
@@ -571,12 +571,12 @@ wosaSpectralEst <- function(timeSeries,
                         proportionOfOverlap=0.5,
                         oversamplingFactor=1,
                         centreData=T,
-                        returnEstFor0FreqP=T,
+                        returnEstFor0FreqP=TRUE,
                         samplingTime=1.0,
                         dataTaper=HanningDataTaper,
                         dataTaperParameter=NULL,
                         ##recentreAfterTaperingP=T, #added option
-                        restorePowerOptionP=T,
+                        restorePowerOptionP=TRUE,
                         sdfTransformation=convertTodB) {
    
     nDFT <- oversamplingFactor*blockSize 
@@ -603,8 +603,8 @@ wosaSpectralEst <- function(timeSeries,
             taperTimeSeries(array(1.0, blockSize),
                             dataTaperFn=dataTaper,
                             taperParameter=dataTaperParameter,
-                            recentreAfterTaperingP=F,
-                            restorePowerOptionP=F)$result
+                            recentreAfterTaperingP=FALSE,
+                            restorePowerOptionP=FALSE)$result
     } else {
         vectorWithDataTaper <- array(1.0, blockSize)
     }
@@ -767,7 +767,7 @@ getOffsetTokthBlock <- function(sampleSize,
 #returns the equivalent degrees of freedom for wosa
 #using Equation (292b) of the SAPA book
 equivalentDOFforWOSA <- function(N, N_S, N_B, vectorWithDataTaper) {
-   acsTaper <- acvs(vectorWithDataTaper, centreDataP=F, acsP=T)$acvs;
+   acsTaper <- acvs(vectorWithDataTaper, centreDataP=FALSE, acsP=TRUE)$acvs;
    temp_ <- if(N_B == 1 ) 0 else (N-N_S)/(N_B -1);
    nShift <- round(temp_);
    acsTaper <- acsTaper^2;

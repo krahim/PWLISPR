@@ -152,8 +152,8 @@ dpss.taper.2 <- function (n, k, nw = 4, nmax = 2^(ceiling(log(n, 2)))) {
 dpssTapersTriDiag <- function(   N,
                                  numberOfTapers,
                                  taperParameter=4,
-                                 printProgressP=F,
-                                 computeTrueEigenvaluesP=F) {
+                                 printProgressP=FALSE,
+                                 computeTrueEigenvaluesP=FALSE) {
 
    w <- taperParameter / N;
    if(0 >= w || w > 0.5) {
@@ -206,9 +206,9 @@ multitaperSpectralEstimate <- function( timeSeries,
                      nTapers=length(mDataTapers[1,]),
                      nNonZeroFreqs="halfNextPowerOf2",
                      samplingTime=1.0,
-                     recentreAfterTaperingP=T,
-                     restorePowerOptionP=T,
-                     returnEstFor0FreqP=F,
+                     recentreAfterTaperingP=TRUE,
+                     restorePowerOptionP=TRUE,
+                     returnEstFor0FreqP=FALSE,
                      sdfTransformation=convertTodB,
                      returnEigenCoef=FALSE) {
    if(   !is.matrix(mDataTapers) ||
@@ -654,7 +654,7 @@ largestEigenvaluesOfTridiagonalMatrix <- function(diagEl,
 generateInitialGuessAtDPSS <- function(
                            N,
                            orderOfTaper,
-                           halfSizeP=F) {
+                           halfSizeP=FALSE) {
    result <- NULL;
    if(halfSizeP) {
       result <- 1:(N/2);
@@ -839,7 +839,7 @@ fastTridiagEigenvalueToDPSS <- function(
 #the method of Exercise [8.1], page 390,
 #of the SAPA book
 dpssToEigenvalue <- function(dpss, NW) {
-   dpssACVS <- acvs(dpss, centreDataP=F)$acvs;
+   dpssACVS <- acvs(dpss, centreDataP=FALSE)$acvs;
    N <- length(dpss);
    W <- NW/N;
 

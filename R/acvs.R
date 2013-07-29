@@ -25,7 +25,7 @@
 
 #coded to match the lisp acvs function in the SAPA code
 #Note: see Equations (191a) and (190b) of the SAPA book
-acvs <- function(timeSeries, centreDataP=T, acsP=F) {
+acvs <- function(timeSeries, centreDataP=TRUE, acsP=FALSE) {
    N <- length(timeSeries);
    ntot <- nextPowerOf2(2*N);
    N_Xntot <- N*ntot;
@@ -43,7 +43,7 @@ acvs <- function(timeSeries, centreDataP=T, acsP=F) {
 }
 
 #uses my.acf provided in waveslim
-acvs_ws <- function(timeSeries, centreDataP=T, acsP=F) {
+acvs_ws <- function(timeSeries, centreDataP=TRUE, acsP=FALSE) {
    if(centreDataP) {
    timeSeries <- timeSeries - mean(timeSeries);
    }
@@ -62,7 +62,7 @@ biasedACVStoUnbiasedACVS <- function(biasedACVS) {
 
 ## i'm not sure what this is for but acvs2 allows
 ## for matrix valued fft used in dpss.R
-acvsB <- function(timeSeries, centreDataP=T, acsP=F) {
+acvsB <- function(timeSeries, centreDataP=TRUE, acsP=FALSE) {
    N <- length(timeSeries);
    ntot <- nextPowerOf2(2*N);
    N_Xntot <- N*ntot;

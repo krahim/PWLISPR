@@ -251,8 +251,8 @@ dpssDataTaper <- function( timeSeries, taperParameter=4, normalization="unity") 
 taperTimeSeries <- function( centredTimeSeries,
                               dataTaperFn=NULL,
                               taperParameter=NULL,
-                              recentreAfterTaperingP=T,
-                              restorePowerOptionP=T) {
+                              recentreAfterTaperingP=TRUE,
+                              restorePowerOptionP=TRUE) {
    if(!is.function(dataTaperFn)) {
       return();
    }
@@ -319,8 +319,8 @@ taperTimeSeries <- function( centredTimeSeries,
 #centre the data in R
 taperTimeSeriesWSupplied <- function( centredTimeSeries,
                               dataTaperParameters,
-                              recentreAfterTaperingP=T,
-                              restorePowerOptionP=T) {
+                              recentreAfterTaperingP=TRUE,
+                              restorePowerOptionP=TRUE) {
    if(length(centredTimeSeries) != length(dataTaperParameters)) {
       return();
    }
